@@ -36,3 +36,9 @@ Retain the upstream `LICENSE` and copyright notices.
 - `tests/browser-smoke.mjs` is optional browser verification. It needs `playwright-core` and `PANSOU_BROWSER_EXECUTABLE`; `PANSOU_PLAYWRIGHT_MODULE` may point to an existing module installation.
 - GitHub CI runs Go checks, Node built-in tests, a Docker build, and local-container HTTP/authentication smoke tests. It does not publish an image or create hosting resources.
 - See `VERIFICATION.md` for verification scope and `DEPLOYMENT.md` for production requirements.
+
+## Hosting preparation
+
+- `render.yaml` is an optional user-confirmed deployment template: one Free Docker web service, no database/disk, automatic deployments off, generated JWT secret, and an operator-entered `AUTH_USERS` value.
+- Do not treat a Free instance as a guarantee of zero billing on an account with a payment method; review workspace usage/overage rules before creating resources.
+- CI found a trailing-slash SPA route issue; regression tests cover `/nested/view/`, the `/web/` alias, and rejecting static-file paths with an extra slash.

@@ -131,6 +131,8 @@ func TestPublicRouting(t *testing.T) {
 		{"/", 200, "test UI", false}, {"/web/", 200, "test UI", false}, {"/web", 200, "test UI", false},
 		{"/index.html", 200, "test UI", false}, {"/app.js", 200, "console.log", false}, {"/web/app.js", 200, "console.log", false},
 		{"/styles.css", 200, "color:black", false}, {"/fonts/test.woff2", 200, "font", false}, {"/library/recent", 200, "test UI", false},
+		{"/nested/view/", 200, "test UI", false}, {"/web/nested/view/", 200, "test UI", false},
+		{"/app.js/", 404, "", false}, {"/web/app.js/", 404, "", false}, {"/fonts/test.woff2/", 404, "", false},
 		{"/missing.js", 404, "", false}, {"/missing.js/nested", 404, "", false}, {"/web/missing.css", 404, "", false},
 		{"/fonts/", 404, "", false}, {"/fonts/missing", 404, "", false}, {"/assets/missing", 404, "", false},
 		{"/.hidden", 404, "", false}, {"/web/.hidden", 404, "", false}, {"/../main.go", 404, "", false},

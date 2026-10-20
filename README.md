@@ -825,3 +825,5 @@ curl http://localhost:8888/api/health
 ## 个人网页版本验证
 
 新增网页、服务认证与多端交互已经过本机验证，详见 [VERIFICATION.md](VERIFICATION.md)。容器构建结果以本仓库 [GitHub Actions](https://github.com/kfw9yg99wd-dev/pansou-/actions) 为准。代码上传本身不代表公网搜索后端已经上线。
+
+需要免费托管时，可阅读 [Render 免费部署说明](DEPLOYMENT.md#可选render-免费实例入口)，然后使用[一键部署入口](https://render.com/deploy?repo=https://github.com/kfw9yg99wd-dev/pansou-)。确认页应为 Free 实例；涉及支付方式或升级时先核对费用。

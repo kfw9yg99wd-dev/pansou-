@@ -1,0 +1,65 @@
+# One Free web service only. No database, disk, worker, or paid fallback.
+# Review current Render limits before applying; do not add a payment method
+# just to bypass a Free-plan limitation.
+services:
+  - type: web
+    name: pansou-personal-web
+    runtime: docker
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: "off"
+    numInstances: 1
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: PANSOU_LISTEN_HOST
+        value: "0.0.0.0"
+      - key: AUTH_ENABLED
+        value: "true"
+      - key: AUTH_USERS
+        sync: false
+      - key: AUTH_JWT_SECRET
+        generateValue: true
+      - key: AUTH_TOKEN_EXPIRY
+        value: "12"
+      - key: ENABLED_PLUGINS
+        value: pansearch,quarksoo,quarktv,ouge,duoduo,hunhepan,feikuai,nyaa,rrbt,cldi,clmao,clxiong,btbtlb,shandian,zhizhen,labi,muou,wanou,yunso,yunsou,gaoqing888,hdmoli,haitunsou
+      - key: CHANNELS
+        value: tgsearchers7,Aliyun_4K_Movies,Quark_Movies,bdwpzhpd,Channel_Shares_115,wp123zy,cilidianying,ciliziyuanku
+      - key: CONCURRENCY
+        value: "4"
+      - key: OUTBOUND_MAX_CONCURRENCY
+        value: "4"
+      - key: PLUGIN_TIMEOUT
+        value: "12"
+      - key: PLUGIN_BATCH_TIMEOUT_SECONDS
+        value: "12"
+      - key: TG_CHANNEL_TIMEOUT_SECONDS
+        value: "10"
+      - key: TG_CHANNEL_REQUEST_TIMEOUT_SECONDS
+        value: "8"
+      - key: ASYNC_MAX_BACKGROUND_WORKERS
+        value: "8"
+      - key: ASYNC_MAX_BACKGROUND_TASKS
+        value: "40"
+      - key: ASYNC_RESPONSE_TIMEOUT
+        value: "4"
+      - key: CACHE_ENABLED
+        value: "true"
+      - key: CACHE_PATH
+        value: /app/cache
+      - key: CACHE_MAX_SIZE
+        value: "64"
+      - key: CACHE_TTL
+        value: "60"
+      - key: ASYNC_LOG_ENABLED
+        value: "false"
+      - key: PLUGIN_SEARCH_DETAIL_LOG
+        value: "false"
+      - key: GOMAXPROCS
+        value: "2"
+      - key: GOMEMLIMIT
+        value: 384MiB

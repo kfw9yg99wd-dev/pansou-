@@ -91,3 +91,19 @@ npm run test:web
 - `web/` 的界面与交互为本仓库独立实现；没有复制 `fish2018/pansou-web` 的前端代码或图标。
 - IBM Plex Sans 字体来自 [Google Fonts](https://github.com/google/fonts/tree/main/ofl/ibmplexsans)，未修改字体内容，遵循随附的 `web/fonts/OFL.txt`，不属于 MIT 授权范围。
 - 原有 README 保留上游资料供 API 参考；**本分支部署与认证要求以本文档为准**。
+
+## 可选：Render 免费实例入口
+
+[使用本仓库的一键部署入口](https://render.com/deploy?repo=https://github.com/kfw9yg99wd-dev/pansou-)
+
+仓库根目录的 `render.yaml` 只定义一个 `Free` Docker Web Service，不定义数据库、磁盘或付费服务，并关闭自动部署。该文件本身不会创建任何 Render 资源；需要你登录 Render、查看资源与费用后确认应用。
+
+- 初次创建时会要求填写 `AUTH_USERS`，格式为 `你的服务用户名:你的随机密码`。密码至少 12 字符，建议使用密码管理器生成；不要直接使用 GitHub、Apple 或网盘密码。
+- JWT 密钥由 Render 随机生成，不写入仓库。
+- 在确认页核对实例计划为 **Free**。如果提示付费、升级或添加支付方式，先停止并确认，不要默认继续。
+- 免费服务无访问 15 分钟后会休眠，重新访问需要冷启动；缓存文件也可能在休眠或重启后丢失。
+- 免费实例小时数由工作区共享，每月额度为 750 小时。带宽、构建分钟及外网请求量另有约束。
+- **Free 不代表任何情况下都不会收费**：据 Render 官方说明，已添加支付方式的工作区在部分额度超出后可能产生费用；没有支付方式时，对应情况通常是暂停服务或构建。创建前应查看账户的计费设置与当时的限制。
+- 适合个人测试，不承诺全天候在线或所有搜索来源都可用；不使用定时请求规避平台休眠规则。
+
+来源：[Render 免费服务说明](https://render.com/docs/free)、[Blueprint 配置规范](https://render.com/docs/blueprint-spec)。

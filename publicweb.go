@@ -267,6 +267,15 @@ func newPublicHandler(api http.Handler, assets fs.FS, settings publicSettings) h
 		name := strings.TrimPrefix(r.URL.Path, "/")
 		// Both /app.js and /web/app.js address the same embedded file.
 		name = strings.TrimPrefix(name, "web/")
+		// fs.ValidPath rejects trailing slashes. Normalize UI routes before Stat,
+		// but never reinterpret /app.js/ as a real static file.
+		if strings.HasSuffix(name, "/") {
+			name = strings.TrimSuffix(name, "/")
+			if strings.Contains(name, ".") {
+				http.NotFound(w, r)
+				return
+			}
+		}
 		if name == "" || name == "web" {
 			name = "index.html"
 		}
