@@ -32,7 +32,7 @@ jobs:
       - name: Verify Go dependencies and web adapter
         run: |
           go mod verify
-          go test -race .
+          go test -race . ./api
           go vet .
           go build -trimpath -o /tmp/pansou .
       - name: Verify frontend syntax and data handling

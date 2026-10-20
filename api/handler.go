@@ -176,6 +176,14 @@ func SearchHandler(c *gin.Context) {
 		}
 	}
 
+	// Both GET and POST require a real keyword. Reject before selecting any
+	// sources so malformed requests cannot accidentally enumerate a channel.
+	req.Keyword = strings.TrimSpace(req.Keyword)
+	if req.Keyword == "" {
+		c.JSON(http.StatusBadRequest, model.NewErrorResponse(400, "关键词不能为空"))
+		return
+	}
+
 	// 请求指定的频道/插件数量必须封顶：它会被当作 TG 路径的工作池大小，
 	// 直接决定 goroutine 数与出站请求数（见 service.searchTG）。
 	if channelsOverLimit(len(req.Channels)) {

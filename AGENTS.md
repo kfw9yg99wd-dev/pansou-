@@ -42,3 +42,4 @@ Retain the upstream `LICENSE` and copyright notices.
 - `render.yaml` is an optional user-confirmed deployment template: one Free Docker web service, no database/disk, automatic deployments off, generated JWT secret, and an operator-entered `AUTH_USERS` value.
 - Do not treat a Free instance as a guarantee of zero billing on an account with a payment method; review workspace usage/overage rules before creating resources.
 - CI found a trailing-slash SPA route issue; regression tests cover `/nested/view/`, the `/web/` alias, and rejecting static-file paths with an extra slash.
+- Container smoke checks also caught missing keyword validation in the upstream search handler. Both GET and POST now reject blank/whitespace keywords before touching sources; `go test -race . ./api` covers this regression.
