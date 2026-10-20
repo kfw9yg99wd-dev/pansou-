@@ -1,0 +1,16 @@
+.DS_Store
+/cache
+/logs
+.env
+.env.*
+!.env.example
+.runtime/
+bin/
+node_modules/
+test-results/
+*.log
+*.prof
+*.test
+/pansou
+/pansou-linux*
+/pansou-darwin*

@@ -1,0 +1,10 @@
+{
+  "name": "pansou-personal-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:web": "node --test tests/web-data.test.mjs",
+    "check:web": "node --check web/app.js && node --check web/data.js"
+  }
+}

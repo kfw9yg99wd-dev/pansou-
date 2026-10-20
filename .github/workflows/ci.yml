@@ -1,0 +1,59 @@
+name: Build and verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.14'
+          cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify Go dependencies and web adapter
+        run: |
+          go mod verify
+          go test -race .
+          go vet .
+          go build -trimpath -o /tmp/pansou .
+      - name: Verify frontend syntax and data handling
+        run: |
+          npm run check:web
+          npm run test:web
+      - name: Build container without publishing it
+        run: docker build --tag pansou-personal-ci .
+      - name: Verify container authentication and static assets
+        shell: bash
+        run: |
+          export PANSOU_TEST_PASSWORD="$(openssl rand -hex 16)"
+          export PANSOU_TEST_BASE_URL=http://127.0.0.1:18888
+          PANSOU_CI_JWT_SECRET="$(openssl rand -hex 32)"
+          docker run -d --name pansou-ci -p 127.0.0.1:18888:8888 \
+            -e AUTH_USERS="ci-user:$PANSOU_TEST_PASSWORD" \
+            -e AUTH_JWT_SECRET="$PANSOU_CI_JWT_SECRET" \
+            pansou-personal-ci
+          trap 'docker logs pansou-ci; docker rm -f pansou-ci' EXIT
+          for attempt in {1..30}; do
+            if curl -fsS "$PANSOU_TEST_BASE_URL/api/health" >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/http-smoke.mjs

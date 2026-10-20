@@ -1,0 +1,25 @@
+services:
+  pansou:
+    build: .
+    image: pansou-personal:local
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:${PANSOU_HTTP_PORT:-8080}:${PORT:-8888}"
+    volumes:
+      - pansou-cache:/app/cache
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 768m
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+volumes:
+  pansou-cache:

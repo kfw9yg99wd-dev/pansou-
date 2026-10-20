@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="个人资源检索工作台：聚合公开网盘分享与磁力索引，按类型整理候选链接。">
+  <title>PanSou · 资源检索</title>
+  <link rel="icon" href="/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">跳到主要内容</a>
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M5.5 7a8 8 0 0 1 13-2L20 7M4 17l1.5 2a8 8 0 0 0 13-2"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M15 4H4v11"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 18 6M7 6h11v11"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <button id="drawer-backdrop" class="drawer-backdrop" aria-label="收起导航" hidden></button>
+    <aside id="sidebar" class="sidebar" aria-label="工作台导航">
+      <a class="brand" href="/" aria-label="PanSou 首页">
+        <span class="brand-mark"><svg class="icon"><use href="#i-search"/></svg></span>
+        <span>PanSou<small>个人寻源工作台</small></span>
+      </a>
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="main-nav" aria-label="主要导航">
+        <button class="nav-item is-active" data-panel="search" aria-current="page"><svg class="icon"><use href="#i-search"/></svg>资源检索</button>
+        <button class="nav-item" data-panel="sources"><svg class="icon"><use href="#i-grid"/></svg>搜索来源</button>
+        <button class="nav-item" data-panel="guide"><svg class="icon"><use href="#i-info"/></svg>使用说明</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <p class="small-label">关于结果</p>
+        <p>聚合公开索引，不托管文件。链接有效性、集数与画质仍需核验。</p>
+        <a href="https://github.com/kfw9yg99wd-dev/pansou-" target="_blank" rel="noopener noreferrer">查看项目仓库<svg class="icon"><use href="#i-arrow"/></svg></a>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="menu-toggle" class="icon-button menu-toggle" aria-label="展开导航" aria-expanded="false" aria-controls="sidebar"><svg class="icon"><use href="#i-menu"/></svg></button>
+          <span class="breadcrumb">工作台<span aria-hidden="true">/</span><strong id="panel-title">资源检索</strong></span>
+        </div>
+        <div class="topbar-actions">
+          <span id="service-status" class="service-status" role="status">正在连接后端</span>
+          <button id="reconnect" class="icon-button" aria-label="重新检查后端连接" title="重新检查后端连接"><svg class="icon"><use href="#i-refresh"/></svg></button>
+          <button id="account-button" class="button button-secondary" hidden>登录服务</button>
+        </div>
+      </header>
+
+      <main id="workspace" class="workspace" tabindex="-1">
+        <section id="panel-search" class="panel" aria-labelledby="search-heading">
+          <div class="page-heading"><div><p class="eyebrow">RESOURCE SEARCH</p><h1 id="search-heading">资源检索</h1><p>输入片名或关键词，把分散的资源线索集中起来。</p></div><span class="heading-note">网盘分享 / 磁力索引</span></div>
+
+          <form id="search-form" class="search-card" role="search">
+            <label class="field-label" for="query">片名、原名或关键词</label>
+            <div class="search-row">
+              <div class="query-field"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="query" name="query" type="search" placeholder="例如：六龙飞天、Full Metal Panic" required maxlength="200" autocomplete="off" aria-describedby="search-hint" disabled></div>
+              <button id="search-button" class="button button-primary" type="submit" disabled><span>搜索资源</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              <button id="cancel-search" class="button button-secondary" type="button" hidden>停止搜索</button>
+            </div>
+            <div class="search-options">
+              <label for="source-mode">搜索范围</label>
+              <select id="source-mode" name="source"><option value="all">全部公开来源</option><option value="plugin">网站索引</option><option value="tg">Telegram 频道</option></select>
+              <span id="search-hint">试试不同译名；回车开始搜索，按 / 聚焦输入框。</span>
+            </div>
+          </form>
+
+          <div id="notice" class="notice" role="alert" hidden></div>
+          <div class="result-toolbar">
+            <div class="result-stats" aria-label="检索统计"><span>候选结果<strong id="total-count">—</strong></span><span>资源类型<strong id="type-count">—</strong></span><span>本轮耗时<strong id="search-duration">—</strong></span></div>
+            <button id="export-results" class="button button-secondary" disabled><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>导出当前结果</button>
+          </div>
+          <div id="type-tabs" class="type-tabs" role="tablist" aria-label="按资源类型筛选" hidden></div>
+          <section id="results-panel" aria-label="检索结果" aria-busy="false">
+            <div id="empty-state" class="empty-state"><svg class="empty-icon" aria-hidden="true"><use href="#i-search"/></svg><h2 id="empty-title">从一个关键词开始</h2><p id="empty-description">输入作品名称后，候选链接会出现在这里。先定位资源，再核验内容。</p></div>
+            <div id="result-list" class="result-list" role="list"></div>
+          </section>
+          <p id="search-progress" class="search-progress" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="panel-sources" class="panel" aria-labelledby="sources-heading" hidden>
+          <div class="page-heading"><div><p class="eyebrow">SEARCH SOURCES</p><h1 id="sources-heading">搜索来源</h1><p>这里显示后端当前配置，不代表每个来源都能成功响应。</p></div></div>
+          <div class="source-grid">
+            <article class="information-card"><h2>网站索引</h2><p id="plugin-summary">等待后端信息</p><div id="plugin-list" class="source-tags"></div></article>
+            <article class="information-card"><h2>Telegram 频道</h2><p id="channel-summary">等待后端信息</p><div id="channel-list" class="source-tags"></div></article>
+          </div>
+          <p class="section-note">如需增减来源，请修改部署环境中的 ENABLED_PLUGINS 和 CHANNELS，并重启后端。此页面不会修改服务器配置。</p>
+        </section>
+
+        <section id="panel-guide" class="panel" aria-labelledby="guide-heading" hidden>
+          <div class="page-heading"><div><p class="eyebrow">QUICK GUIDE</p><h1 id="guide-heading">使用说明</h1><p>搜索结果是线索，不是已验收的片源。</p></div></div>
+          <div class="guide-list">
+            <article><span class="step-number">01</span><div><h2>用不同名称交叉搜索</h2><p>中文译名、原文名与英文名可能命中不同来源。找系列作品时，可以加上季数、年份或版本信息。</p></div></article>
+            <article><span class="step-number">02</span><div><h2>先筛类型，再核对内容</h2><p>通过资源类型标签切换网盘或磁力结果。标题里的 4K、全集等信息来自发布者，仍需打开文件核验。</p></div></article>
+            <article><span class="step-number">03</span><div><h2>留下可追溯的出处</h2><p>每条结果保留来源与链接，可复制或导出 CSV。填写寻源表时，建议记录具体网站或频道，而不只是「PanSou」。</p></div></article>
+            <article><span class="step-number">04</span><div><h2>只使用你有权访问的内容</h2><p>不要在不可信页面输入账号密码或安装不明程序。本站不存储资源文件，也不保证第三方链接的可用性或授权状态。</p></div></article>
+          </div>
+          <div class="information-card deployment-note"><h2>代码仓库不等于搜索服务器</h2><p>完整搜索需要 Go 后端持续运行。GitHub Pages 只能托管静态文件；若显示后端未连接，请先完成服务器或容器平台部署。</p><a href="https://github.com/kfw9yg99wd-dev/pansou-/blob/main/DEPLOYMENT.md" target="_blank" rel="noopener noreferrer">查看部署说明<svg class="icon"><use href="#i-arrow"/></svg></a></div>
+        </section>
+        <footer class="page-footer"><span>PanSou 个人部署版</span><a href="https://github.com/fish2018/pansou" target="_blank" rel="noopener noreferrer">开源搜索后端：fish2018 / PanSou</a></footer>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="login-dialog" aria-labelledby="login-title">
+    <form id="login-form" class="login-form">
+      <svg class="login-icon" aria-hidden="true"><use href="#i-lock"/></svg>
+      <h2 id="login-title">登录搜索服务</h2>
+      <p>使用部署时设置的服务账号。这里不是 GitHub 登录，也不需要网盘账号。</p>
+      <label class="field-label" for="login-user">服务用户名</label><input id="login-user" name="username" autocomplete="username" required maxlength="128">
+      <label class="field-label" for="login-password">服务密码</label><input id="login-password" name="password" type="password" autocomplete="current-password" required aria-describedby="login-error">
+      <p id="login-error" class="field-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button id="close-login" class="button button-secondary" type="button">暂不登录</button><button id="login-submit" class="button button-primary" type="submit">登录服务</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <noscript><p class="noscript">此搜索界面需要启用 JavaScript。你也可以使用后端的 /api/search 接口。</p></noscript>
+</body>
+</html>
